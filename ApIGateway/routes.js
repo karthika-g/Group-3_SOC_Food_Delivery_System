@@ -17,11 +17,11 @@ const ROUTES = [
     },
     {
         url: '/login',
-        auth: false,
+        auth: true,
         creditCheck: false,
         rateLimit: {
             windowMs: 15 * 60 * 1000,
-            max: 5
+            max: 3
         },
         proxy: {
             target: "http://localhost:8080/food-delivery/api/auth/login",
@@ -32,8 +32,24 @@ const ROUTES = [
         }
     },
     {
-        url: '/viewcart',
+        url: '/register',
         auth: true,
+        creditCheck: false,
+        rateLimit: {
+            windowMs: 15 * 60 * 1000,
+            max: 3
+        },
+        proxy: {
+            target: "http://localhost:8080/food-delivery/api/auth/register",
+            changeOrigin: true,
+            pathRewrite: {
+                [`^/register`]: '',
+            },
+        }
+    },
+    {
+        url: '/viewcart',
+        auth: false,
         creditCheck: true,
         rateLimit: {
             windowMs: 15 * 60 * 1000,
@@ -49,7 +65,7 @@ const ROUTES = [
     },
     {
         url: '/placeorder',
-        auth: true,
+        auth: false,
         creditCheck: true,
         rateLimit: {
             windowMs: 15 * 60 * 1000,
@@ -65,7 +81,7 @@ const ROUTES = [
     },
     {
         url: '/createmenu',
-        auth: true,
+        auth: false,
         creditCheck: true,
         rateLimit: {
             windowMs: 15 * 60 * 1000,
