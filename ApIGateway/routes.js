@@ -88,10 +88,26 @@ const ROUTES = [
             max: 15
         },
         proxy: {
-            target: "http://localhost:8080/food-delivery//api/menus",
+            target: "http://localhost:8080/food-delivery/api/menus",
             changeOrigin: true,
             pathRewrite: {
                 [`^/createmenu`]: '',
+            },
+        }
+    },
+    {
+        url: '/viewvendor',
+        auth: false,
+        creditCheck: true,
+        rateLimit: {
+            windowMs: 15 * 60 * 1000,
+            max: 15
+        },
+        proxy: {
+            target: "http://localhost:8080/food-delivery/api/vendors",
+            changeOrigin: true,
+            pathRewrite: {
+                [`^/viewvendor`]: '',
             },
         }
     }

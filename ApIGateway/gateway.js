@@ -23,6 +23,6 @@ app.listen(port, () => {
 
 
 
-app.get('',(req,res,next)=>{
+app.get('/info',(req,res,next)=>{
     res.send('testing the apigateway');
 })
