@@ -41,11 +41,8 @@ public class MenuServiceImpl implements MenuService {
             if (!optionalVendor.isPresent()) {
                 throw new EntityNotFoundException("Vendor ID does not exists");
             }
-            Menu menu = new Menu();
-            menu.setName(menuDto.getName());
-            menu.setDescription(menuDto.getDescription());
+            Menu menu = convertToEntity(menuDto);
             menu.setVendor(optionalVendor.get());
-            menu.setPrice(menu.getPrice());
             return menuRepository.save(menu);
         } catch (Exception e){
             log.error("exception in createMenu ");
@@ -64,6 +61,10 @@ public class MenuServiceImpl implements MenuService {
         if(!optionalMenu.isPresent()) {
             throw new EntityNotFoundException("Menu ID does not exists");
         }
+        Menu menu = optionalMenu.get();
+        menu.setPrice(request.getPrice());
+        menu.setDescription(request.getDescription());
+        menu.setName(request.getName());
         return menuRepository.save(optionalMenu.get());
     }
 
@@ -87,6 +88,7 @@ public class MenuServiceImpl implements MenuService {
 
     private MenuDto convertToDTO(Menu menu) {
         MenuDto menuDto = MenuDto.builder()
+                .id(menu.getId())
                 .description(menu.getDescription())
                 .name(menu.getName())
                 .price(menu.getPrice())
@@ -94,5 +96,13 @@ public class MenuServiceImpl implements MenuService {
                 .build();
         menuDto.setDescription(menu.getDescription());
 return menuDto;
+    }
+
+    private Menu convertToEntity(MenuDto menuDto) {
+        Menu menu = new Menu();
+        menu.setName(menuDto.getName());
+        menu.setDescription(menuDto.getDescription());
+        menu.setPrice(menuDto.getPrice());
+        return menu;
     }
 }

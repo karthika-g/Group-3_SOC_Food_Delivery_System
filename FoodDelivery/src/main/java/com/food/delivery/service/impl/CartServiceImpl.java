@@ -3,7 +3,7 @@ package com.food.delivery.service.impl;
 import com.food.delivery.entity.*;
 import com.food.delivery.model.request.*;
 import com.food.delivery.repository.CartRepository;
-import com.food.delivery.repository.FoodItemRepository;
+import com.food.delivery.repository.MenuRepository;
 import com.food.delivery.service.AuthService;
 import com.food.delivery.service.CartService;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,19 +26,19 @@ public class CartServiceImpl implements CartService {
     private AuthService authService;
 
     @Autowired
-    private FoodItemRepository foodItemRepository;
+    private MenuRepository foodItemRepository;
 
 
 
     public CartDTO addToCart(AddToCartRequest addToCartRequest) {
         Cart cart = getOrCreateCart(); // Implement logic to get or create cart
-        FoodItem foodItem = foodItemRepository.findById(addToCartRequest.getItemId())
+        Menu foodItem = foodItemRepository.findById(addToCartRequest.getItemId())
                 .orElseThrow(() -> new EntityNotFoundException("Food item not found with id: " + addToCartRequest.getItemId()));
 
         CartItem cartItem = new CartItem();
         cartItem.setFoodItem(foodItem);
         cartItem.setQuantity(addToCartRequest.getQuantity());
-
+        cartItem.setCart(cart);
         cart.getCartItems().add(cartItem);
         cart = cartRepository.save(cart);
 
@@ -79,18 +79,23 @@ public class CartServiceImpl implements CartService {
     private CartItemDTO convertToCartItemDTO(CartItem cartItem) {
         CartItemDTO dto = new CartItemDTO();
         dto.setId(cartItem.getId());
-        dto.setFoodItem(convertToFoodItemDTO(cartItem.getFoodItem()));
+        dto.setFoodItem(convertToDTO(cartItem.getFoodItem()));
         dto.setQuantity(cartItem.getQuantity());
         return dto;
     }
 
-    private FoodItemDTO convertToFoodItemDTO(FoodItem foodItem) {
-        FoodItemDTO dto = new FoodItemDTO();
-        dto.setId(foodItem.getId());
-        dto.setName(foodItem.getName());
-        dto.setDescription(foodItem.getDescription());
-        dto.setPrice(foodItem.getPrice());
-        return dto;
+    private MenuDto convertToDTO(Menu menu) {
+        MenuDto menuDto = MenuDto.builder()
+                .id(menu.getId())
+                .description(menu.getDescription())
+                .name(menu.getName())
+                .price(menu.getPrice())
+                .vendorId(menu.getVendor().getId())
+                .build();
+        menuDto.setDescription(menu.getDescription());
+        return menuDto;
     }
+
+
 }
 

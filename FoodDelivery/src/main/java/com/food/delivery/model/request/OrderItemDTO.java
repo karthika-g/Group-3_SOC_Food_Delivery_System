@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class OrderItemDTO {
     private Long itemId;
-    private FoodItemDTO foodItem;
+    private MenuDto foodItem;
     private int quantity;
     // Other fields, getters, setters
 }

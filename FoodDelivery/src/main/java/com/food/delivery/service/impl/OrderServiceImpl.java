@@ -4,7 +4,7 @@ import com.food.delivery.entity.*;
 import com.food.delivery.model.request.*;
 import com.food.delivery.model.request.OrderItemDTO;
 import com.food.delivery.model.request.PlaceOrderRequest;
-import com.food.delivery.repository.FoodItemRepository;
+import com.food.delivery.repository.MenuRepository;
 import com.food.delivery.repository.OrderRepository;
 import com.food.delivery.repository.VendorRepository;
 import com.food.delivery.service.OrderService;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
+    @Autowired
         private OrderRepository orderRepository;
 
         @Autowired
@@ -30,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     ModelMapper modelMapper;
         @Autowired
-        private FoodItemRepository foodItemRepository;
+        private MenuRepository foodItemRepository;
 
         @Override
         public OrderDTO placeOrder(PlaceOrderRequest placeOrderRequest) {
@@ -40,22 +41,22 @@ public class OrderServiceImpl implements OrderService {
             List<OrderItemRequest> orderRequestItems = placeOrderRequest.getItems();
             List<OrderItemDTO> orderItemDTOs = Arrays.asList(modelMapper.map(orderRequestItems, OrderItemDTO[].class));
             List<OrderItem> orderItems = new ArrayList<>();
-
+            Order order = new Order();
+            order.setUser(user);
             double totalOrderPrice = 0.0;
             for (OrderItemDTO orderItemDTO : orderItemDTOs) {
-                FoodItem foodItem = foodItemRepository.findById(orderItemDTO.getItemId())
+                Menu foodItem = foodItemRepository.findById(orderItemDTO.getItemId())
                         .orElseThrow(() -> new EntityNotFoundException("Food item not found with id: " + orderItemDTO.getItemId()));
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setFoodItem(foodItem);
                 orderItem.setQuantity(orderItemDTO.getQuantity());
                 orderItems.add(orderItem);
-
+                orderItem.setOrder(order);
                 totalOrderPrice += foodItem.getPrice() * orderItemDTO.getQuantity();
             }
 
-            Order order = new Order();
-            order.setUser(user);
+
             order.setOrderItems(orderItems);
             order.setTotalPrice(totalOrderPrice);
 
@@ -78,17 +79,20 @@ public class OrderServiceImpl implements OrderService {
         private OrderItemDTO convertToOrderItemDTO(OrderItem orderItem) {
             OrderItemDTO dto = new OrderItemDTO();
             dto.setItemId(orderItem.getId());
-            dto.setFoodItem(convertToFoodItemDTO(orderItem.getFoodItem()));
+            dto.setFoodItem(convertToDTO(orderItem.getFoodItem()));
             dto.setQuantity(orderItem.getQuantity());
             return dto;
         }
 
-        private FoodItemDTO convertToFoodItemDTO(FoodItem foodItem) {
-            FoodItemDTO dto = new FoodItemDTO();
-            dto.setId(foodItem.getId());
-            dto.setName(foodItem.getName());
-            dto.setDescription(foodItem.getDescription());
-            dto.setPrice(foodItem.getPrice());
-            return dto;
-        }
+    private MenuDto convertToDTO(Menu menu) {
+        MenuDto menuDto = MenuDto.builder()
+                .id(menu.getId())
+                .description(menu.getDescription())
+                .name(menu.getName())
+                .price(menu.getPrice())
+                .vendorId(menu.getVendor().getId())
+                .build();
+        menuDto.setDescription(menu.getDescription());
+        return menuDto;
+    }
     }

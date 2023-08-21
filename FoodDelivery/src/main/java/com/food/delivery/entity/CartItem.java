@@ -14,7 +14,7 @@ public class CartItem {
 
     @ManyToOne
     @JsonBackReference
-    private FoodItem foodItem;
+    private Menu foodItem;
 
     @ManyToOne
     @JsonBackReference

@@ -15,7 +15,7 @@ public class OrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-    private FoodItem foodItem;
+    private Menu foodItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
