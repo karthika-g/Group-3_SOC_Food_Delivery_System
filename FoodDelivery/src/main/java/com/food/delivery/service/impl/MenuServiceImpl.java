@@ -34,14 +34,17 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Menu createMenu(MenuDto menuDto) throws ApplicationException {
-        Menu menu = modelMapper.map(menuDto, Menu.class);
+
         try {
             Optional<Vendor> optionalVendor = vendorRepository.findById(menuDto.getVendorId());
             if (!optionalVendor.isPresent()) {
                 throw new EntityNotFoundException("Vendor ID does not exists");
             }
+            Menu menu = new Menu();
+            menu.setName(menuDto.getName());
+            menu.setDescription(menuDto.getDescription());
             menu.setVendor(optionalVendor.get());
-
+            menu.setPrice(menu.getPrice());
             return menuRepository.save(menu);
         } catch (Exception e){
             log.error("exception in createMenu ");
@@ -52,5 +55,24 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> getMenusByVendorId(Long vendorId) {
         return menuRepository.findByVendorId(vendorId);
+    }
+
+    @Override
+    public Menu updateMenu(Menu request) {
+        Optional<Menu> optionalMenu = menuRepository.findById(request.getId());
+        if(!optionalMenu.isPresent()) {
+            throw new EntityNotFoundException("Menu ID does not exists");
+        }
+        return menuRepository.save(optionalMenu.get());
+    }
+
+    @Override
+    public String deleteMenu(Menu request) {
+        Optional<Menu> optionalMenu = menuRepository.findById(request.getId());
+        if(!optionalMenu.isPresent()) {
+            throw new EntityNotFoundException("Menu ID does not exists");
+        }
+        menuRepository.delete(optionalMenu.get());
+        return "Deleted Successfully";
     }
 }

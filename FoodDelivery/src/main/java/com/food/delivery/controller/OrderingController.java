@@ -1,11 +1,6 @@
 package com.food.delivery.controller;
-import com.food.delivery.entity.*;
-import com.food.delivery.exception.ApplicationException;
 import com.food.delivery.model.request.*;
-import com.food.delivery.model.request.MenuDto;
 import com.food.delivery.service.CartService;
-import com.food.delivery.service.FoodItemService;
-import com.food.delivery.service.MenuService;
 import com.food.delivery.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

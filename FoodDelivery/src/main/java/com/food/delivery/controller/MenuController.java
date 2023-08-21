@@ -22,6 +22,19 @@ public class MenuController {
         return ResponseEntity.ok(createdMenu);
     }
 
+    @PutMapping
+    public ResponseEntity<Menu> updateMenu(@RequestBody Menu menu) throws ApplicationException {
+        Menu updateMenu = menuService.updateMenu(menu);
+        return ResponseEntity.ok(updateMenu);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteMenu(@RequestBody Menu menu) throws ApplicationException {
+        String deleteMenu = menuService.deleteMenu(menu);
+        return ResponseEntity.ok(deleteMenu);
+    }
+
+
     @GetMapping("/vendor/{vendorId}")
     public ResponseEntity<List<Menu>> getMenusByVendor(@PathVariable Long vendorId) {
         List<Menu> menus = menuService.getMenusByVendorId(vendorId);

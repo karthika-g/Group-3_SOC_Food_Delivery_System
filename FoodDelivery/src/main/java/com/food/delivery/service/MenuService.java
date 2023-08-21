@@ -13,4 +13,8 @@ public interface MenuService {
     Menu createMenu(MenuDto menu) throws ApplicationException;
 
     List<Menu> getMenusByVendorId(Long vendorId);
+
+    Menu updateMenu(Menu menu);
+
+    String deleteMenu(Menu menu);
 }

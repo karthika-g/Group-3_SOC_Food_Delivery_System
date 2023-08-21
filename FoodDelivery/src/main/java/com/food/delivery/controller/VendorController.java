@@ -25,6 +25,16 @@ public class VendorController {
         return ResponseEntity.ok(vendor);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Vendor> updateVendor(@PathVariable Vendor request) {
+        Vendor vendor = vendorService.updateVendor(request);
+        return ResponseEntity.ok(vendor);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteVendor(@PathVariable Vendor request) {
+        return ResponseEntity.ok(vendorService.deleteVendor(request));
+    }
 
 }
 

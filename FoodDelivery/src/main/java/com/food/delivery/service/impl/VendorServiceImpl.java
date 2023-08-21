@@ -45,5 +45,20 @@ public class VendorServiceImpl implements VendorService {
                 .orElseThrow(() -> new EntityNotFoundException("Vendor not found with id: " + id));
     }
 
+    @Override
+    public Vendor updateVendor(Vendor request) {
+        Vendor vendor = vendorRepository.findById(request.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Vendor not found with id: " + request.getId()));
+        return vendorRepository.save(vendor);
+    }
+
+    @Override
+    public String deleteVendor(Vendor request) {
+        Vendor vendor = vendorRepository.findById(request.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Vendor not found with id: " + request.getId()));
+        vendorRepository.delete(vendor);
+        return "Vendor Deleted";
+    }
+
     // Add more vendor-related methods
 }

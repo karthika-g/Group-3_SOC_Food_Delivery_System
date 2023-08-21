@@ -12,4 +12,8 @@ public interface VendorService {
     VendorDTO registerVendor(VendorRegistrationRequest vendor);
 
     Vendor getVendorById(Long id);
+
+    Vendor updateVendor(Vendor request);
+
+    String deleteVendor(Vendor request);
 }

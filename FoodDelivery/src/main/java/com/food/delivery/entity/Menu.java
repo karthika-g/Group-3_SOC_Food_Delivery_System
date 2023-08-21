@@ -18,6 +18,7 @@ public class Menu {
     private String name;
     private String description;
     // Add more menu fields
+    private double price;
 
     @JsonBackReference
     @ManyToOne(fetch=FetchType.LAZY)
