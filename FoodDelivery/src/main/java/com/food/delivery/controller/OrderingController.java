@@ -1,6 +1,7 @@
 package com.food.delivery.controller;
 import com.food.delivery.model.request.*;
 import com.food.delivery.service.CartService;
+import com.food.delivery.service.MenuService;
 import com.food.delivery.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class OrderingController {
     @Autowired
-    private FoodItemService foodItemService;
+    private MenuService menuService;
 
     @Autowired
     private CartService cartService;
@@ -23,8 +24,8 @@ public class OrderingController {
     private OrderService orderService;
 
     @GetMapping("/food-items")
-    public ResponseEntity<List<FoodItemDTO>> getAllFoodItems() {
-        List<FoodItemDTO> foodItems = foodItemService.getAllFoodItems();
+    public ResponseEntity<List<MenuDto>> getAllFoodItems() {
+        List<MenuDto> foodItems = menuService.getAllFoodItems();
         return ResponseEntity.ok(foodItems);
     }
 

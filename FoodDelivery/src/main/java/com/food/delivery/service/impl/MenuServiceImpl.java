@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Z003YZ0D Akshay Sahu
@@ -74,5 +75,24 @@ public class MenuServiceImpl implements MenuService {
         }
         menuRepository.delete(optionalMenu.get());
         return "Deleted Successfully";
+    }
+
+    @Override
+    public List<MenuDto> getAllFoodItems() {
+        List<Menu> foodItems = menuRepository.findAll();
+        return foodItems.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private MenuDto convertToDTO(Menu menu) {
+        MenuDto menuDto = MenuDto.builder()
+                .description(menu.getDescription())
+                .name(menu.getName())
+                .price(menu.getPrice())
+                .vendorId(menu.getVendor().getId())
+                .build();
+        menuDto.setDescription(menu.getDescription());
+return menuDto;
     }
 }

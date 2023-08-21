@@ -17,4 +17,6 @@ public interface MenuService {
     Menu updateMenu(Menu menu);
 
     String deleteMenu(Menu menu);
+
+    List<MenuDto> getAllFoodItems();
 }
